@@ -1,0 +1,6 @@
+services:
+  counterstrike2:
+    build: .
+    ports:
+      - "27015:27015/tcp"
+      - "27015:27015/udp"
