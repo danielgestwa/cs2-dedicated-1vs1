@@ -4,7 +4,8 @@ Based on dockerfile: https://github.com/joedwards32/CS2
 I suppose it is trustworthy, as it is used in Valve dev docs: https://developer.valvesoftware.com/wiki/Counter-Strike_2/Dedicated_Servers#Docker
 
 There are two folders in bin: maps and configs. First one contains maps downloaded from workshop, downloading instructions below. Second one conatins .cfg files for server custom setup.
-It is created for quick lan party setup.
+
+<b>This repository was created for quick LAN party setup with Workshop map examples. If you want to use it over internet, I suggest to use VPN tunneling. Using open port on Your router with docker-compose and turned off firewall is probably a big security issue. You can also setup API Steam key and set password for your server, but I didn't tested that at all</b>
 
 ## How to run it?
 
