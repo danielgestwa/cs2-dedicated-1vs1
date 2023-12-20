@@ -1,20 +1,32 @@
 from joedwards32/cs2
 
-EXPOSE 27015/tcp
-EXPOSE 27015/udp
+ARG CFG
+ARG MAP
+ARG PORT
+ARG NAME
+ARG MAX_PLAYERS
+
+EXPOSE ${PORT}/tcp
+EXPOSE ${PORT}/udp
+
+ENV CFG ${CFG}
 
 COPY bin /home/
 
-RUN echo 'cat /home/configs/1vs1.cfg >> /home/steam/cs2-dedicated/game/csgo/cfg/gamemode_competitive_server.cfg' >> /home/steam/cs2-dedicated/pre.sh
+#Clear server.cfg file
+RUN echo '> /home/steam/cs2-dedicated/game/csgo/cfg/server.cfg' >> /home/steam/cs2-dedicated/pre.sh
+#Write commands from custom .cfg file
+RUN echo 'cat /home/configs/$CFG >> /home/steam/cs2-dedicated/game/csgo/cfg/server.cfg' >> /home/steam/cs2-dedicated/pre.sh
+#Copy workshop maps
 RUN echo 'cp -r /home/maps/* /home/steam/steamapps/workshop/content/730/' >> /home/steam/cs2-dedicated/pre.sh
 
 # Server configuration
 # Game Server Token from https://steamcommunity.com/dev/managegameservers
 # ENV SRCDS_TOKEN=
 # (Set the visible name for your private server)
-ENV CS2_SERVERNAME=pVp_1vs1_PL
+ENV CS2_SERVERNAME=${NAME}
 # (CS2 server listen port tcp_udp)
-ENV CS2_PORT=27015
+ENV CS2_PORT=${PORT}
 # (Put server in a low CPU state when there are no players. 0 ENV hibernation disabled, 1 ENV hibernation enabled)
 ENV CS2_SERVER_HIBERNATE=1
 # (Optional, use a simple TCP proxy to have RCON listen on an alternative port. Useful for services like AWS Fargate which do not support mixed protocol ports.)
@@ -26,17 +38,17 @@ ENV CS2_RCONPW=""
 # (CS2 server password)
 ENV CS2_PW=""
 # (Max players)
-ENV CS2_MAXPLAYERS=10
+ENV CS2_MAXPLAYERS=${MAX_PLAYERS}
 # (Optional additional arguments to pass into cs2)
-ENV CS2_ADDITIONAL_ARGS="+host_workshop_map 3108880806"
+ENV CS2_ADDITIONAL_ARGS="+host_workshop_map ${MAP}"
 
 # Game modes
 # (Game type, e.g. casual, competitive, deathmatch. See https://developer.valvesoftware.com/wiki/Counter-Strike_2/Dedicated_Servers)
-ENV CS2_GAMEALIAS=competitive
+ENV CS2_GAMEALIAS=custom
 # (Used if CS2_GAMEALIAS not defined. See https://developer.valvesoftware.com/wiki/Counter-Strike_2/Dedicated_Servers)
 ENV CS2_GAMETYPE=0
 # (Used if CS2_GAMEALIAS not defined. See https://developer.valvesoftware.com/wiki/Counter-Strike_2/Dedicated_Servers)
-ENV CS2_GAMEMODE=1
+ENV CS2_GAMEMODE=3
 # (Map pool)
 ENV CS2_MAPGROUP=mg_active
 # (Start map)

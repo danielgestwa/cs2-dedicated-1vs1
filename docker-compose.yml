@@ -1,6 +1,13 @@
 services:
-  counterstrike2:
-    build: .
+  cs2m1:
+    build:
+      context: .
+      args:
+        - MAP=3108880806
+        - CFG=1vs1.cfg
+        - PORT=27015
+        - NAME=pvp_1vs1
+        - MAX_PLAYERS=2
     ports:
       - "27015:27015/tcp"
       - "27015:27015/udp"
