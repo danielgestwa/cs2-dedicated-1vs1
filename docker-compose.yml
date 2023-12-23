@@ -6,8 +6,20 @@ services:
         - MAP=3108880806
         - CFG=1vs1.cfg
         - PORT=27015
-        - NAME=pvp_1vs1
-        - MAX_PLAYERS=2
+        - NAME=stairs_1vs1
+        - MAX_PLAYERS=4
     ports:
       - "27015:27015/tcp"
       - "27015:27015/udp"
+  cs2m2:
+    build:
+      context: .
+      args:
+        - MAP=3104635007
+        - CFG=1vs1.cfg
+        - PORT=36000
+        - NAME=boxes_1vs1
+        - MAX_PLAYERS=4
+    ports:
+      - "36000:36000/tcp"
+      - "36000:36000/udp"
