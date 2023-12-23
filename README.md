@@ -1,37 +1,59 @@
-# Counter Strike 2 dedicated server with default workshop maps support
+# Counter Strike 2 Dedicated Server with Default Workshop Maps Support
 
-Based on dockerfile: https://github.com/joedwards32/CS2
-I suppose it is trustworthy, as it is used in Valve dev docs: https://developer.valvesoftware.com/wiki/Counter-Strike_2/Dedicated_Servers#Docker
+This repository hosts a Counter Strike 2 dedicated server setup, leveraging a Dockerfile from [joedwards32/CS2](https://github.com/joedwards32/CS2). This Dockerfile is referenced in Valve's development documentation ([Counter-Strike 2 Dedicated Servers](https://developer.valvesoftware.com/wiki/Counter-Strike_2/Dedicated_Servers#Docker)), providing reliability.
 
-There are two folders in bin: maps and configs. First one contains maps downloaded from workshop, downloading instructions below. Second one conatins .cfg files for server custom setup.
+## Purpose
 
-<b>This repository was created for quick LAN party setup with Workshop map examples. If you want to use it over internet, I suggest to use VPN tunneling. Using open port on Your router with docker-compose and turned off firewall is probably a big security issue. You can also setup API Steam key and set password for your server, but I didn't tested that at all</b>
+Primarily designed for quick LAN party setups, this repository showcases examples of Workshop maps. Note that for internet usage, it's recommended to implement VPN tunneling for security. Directly opening ports on your router, using docker-compose, and disabling firewalls could pose significant security risks. For advanced settings like setting up an API Steam key or server passwords, these are available but haven't been extensively tested.
 
-## How to run it?
+## How to Run
 
-1. Install docker and docker-compose software on your machine or computer in your network. Remember to open ports on Your server firewall (default is 27015 both on TCP and UDP). I used some lenovo minipc with Ubuntu server and UFW disabled.
-2. Clone or download this repository and type "docker compose up -d" in proper folder, if it fails then add "sudo" at the beggining.
-3. Wait for cs2 server to be installed. You can check that by typing "docker ps | grep cs2". It will display list of running containers. Copy it's id and type "docker logs <container_id>", e.g. "docker logs 2e29d2f5bbc2". Adding "sudo" might be required. Full install on 150 MBps connection should take around 1h.
-4. Open CS2 client, open console (by clicking ~, you have to enable it manually in settings) and type "connect <your-server-ip". In my case that was "connect 127.0.0.1" on my local machine, and "connect 192.168.0.149" on my second PC in same network. You can also specify port different than default one "connect <server-ip>:<server-port>"
+1. **Prerequisites:** Install Docker and docker-compose on your machine or within your networked computer. Ensure that ports (default: 27015 TCP/UDP) are open on your server firewall. For instance, I used a Lenovo mini PC with Ubuntu Server and UFW disabled.
+  
+2. **Setup:** Clone or download this repository and navigate to the folder. Run `docker-compose up -d` (if unsuccessful, prepend with `sudo`).
+
+3. **Installation Confirmation:** Confirm the CS2 server installation by executing `docker ps | grep cs2`. Retrieve the container's ID and check the installation logs via `docker logs <container_id>` (e.g., `docker logs 2e29d2f5bbc2`). Use `sudo` if required. Installation on a 150 Mbps connection typically takes around an hour.
+
+4. **Connecting to Server:** Open the CS2 client, access the console (enable it manually in settings), and enter `connect <your-server-ip>`. For example, on a local machine, it might be `connect 127.0.0.1`, while on another PC in the same network, it could be `connect 192.168.0.149`. Optionally, specify a port different from the default one via `connect <server-ip>:<server-port>`.
 
 ## Maps
 
-Default map added to this project: https://steamcommunity.com/sharedfiles/filedetails/?id=3108880806
+The repository includes two default maps:
+- [Workshop Map 1](https://steamcommunity.com/sharedfiles/filedetails/?id=3108880806)
+- [Workshop Map 2](https://steamcommunity.com/sharedfiles/filedetails/?id=3104635007)
 
-If you want to use another map, then open Your Steam client and subscribe it in workshop.
-After download is finished it should appear in Steam/steamapps/workshop/content/730 (same folder name as id parameter in url).
-Copy newly downloaded folder to this bin/maps project, and change MAP value (in docker-compose.yml) to proper id (same as folder name and id parameter in url).
+To incorporate the new map:
+
+1. **Subscribe & Download:** Subscribe to the new map in your Steam client's workshop.
+  
+2. **Locate Downloaded Map:** After the download is complete, find the map in `Steam/steamapps/workshop/content/730` (the folder name corresponds to the ID parameter in the URL).
+  
+3. **Add to Repository:** Copy the newly downloaded folder to the `bin/maps` directory within this project.
+  
+4. **Update Configuration:** Modify the `MAP` value in `docker-compose.yml` to match the ID of the new map (same as the folder name and ID parameter in the URL). For example, using the ID `3104635007` in the `docker-compose.yml` file will integrate the newly added map into your server setup alongside the existing maps.
 
 ## Configs
 
-If you want to change default config then add another .cfg file to configs folder. After that change CFG value in docker-compose.yml to newly added file.
-If you want to use default game config then comment 17 and 19 line in Dockerfile file (it's truncating server.cfg file and adds one that you added).
-You can also change CS2_GAMEALIAS (or CS_GAMETYPE and CS_GAMEMODE) at line 47 for proper default settings (in Dockerfile too).
+For altering the default config:
+- Add another `.cfg` file to the `configs` folder.
+- Update the `CFG` value in `docker-compose.yml` to the newly added file.
+- To retain the default game config, comment lines 17 and 19 in the `Dockerfile` (which truncates `server.cfg` and adds a new one).
 
-## More servers, updating changes
+To adjust default settings:
+- Modify `CS2_GAMEALIAS` (or `CS_GAMETYPE` and `CS_GAMEMODE`) at line 47 in the `Dockerfile`.
 
-If you want to, you can run multiple local servers, just copy cs2m1 structure and paste it once again, as e.g. cs2m2.
-You have to change default PORT and server NAME too. I think you would want to change other settings, like MAX_PLAYERS anyway.
-After changes in docker-compose.yml, running "docker compose up -d" should update container. If you changed Dockerfile, you might need to run "docker compose build <service-name>", e.g. "docker compose build cs2m1" and then "docker-compose up -d".
+## Running Multiple Servers & Updating Changes
 
-Have fun!
+To add the newly included map or update configurations:
+
+- Duplicate the `cs2m1` structure to create another server setup named `cs2m3`.
+  
+- Customize settings like `PORT`, `NAME`, and others as needed, including adjusting `MAX_PLAYERS`.
+
+To apply changes:
+
+- After modifying the `docker-compose.yml` file, running `docker-compose up -d` will update the container to reflect alterations.
+
+- For modifications in the `Dockerfile`, execute `docker-compose build cs2m3`, followed by `docker-compose up -d` to implement the changes specific to `cs2m3`.
+
+Enjoy the gaming experience with the updated server configurations!
